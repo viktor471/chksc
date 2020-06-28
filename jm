@@ -94,6 +94,8 @@ echo "========================================================================"
 								echo $line
 								sed -i "$arg d" ~/place
 								echo $line >> ~/place
+								echo ==================
+								cat -n ~/place
 								lines=$(`cat ~/place`)
 							fi
 						else
@@ -310,6 +312,9 @@ echo "========================================================================"
 							if [[ $exflag != 1 ]]
 							then
 								echo $(pwd)	>> ~/place
+								echo $(pwd)
+								echo ==================
+ 
 								lines=$(cat ~/place)
 							fi
 							cat -n ~/place
@@ -347,6 +352,7 @@ echo "========================================================================"
 							then
 								echo $arg	>> ~/place
 								lines=$(cat ~/place)
+								cat -n ~/place
 							fi
 						fi
 						;;
