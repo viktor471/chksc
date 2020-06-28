@@ -270,8 +270,8 @@ echo "========================================================================"
 						;;
 
 					j)
-						cd $(head -1 ~/place)
-						echo $(head -1 ~/places) >> ~/hplaces	
+						cd $(tail -1 ~/place)
+						echo $(tail -1 ~/place) >> ~/hplaces	
 						pwd;
 						;;
 
@@ -341,8 +341,9 @@ echo "========================================================================"
 							read a
 							if [[ $a == "y" ]]
 							then
-								sed -i $(($arg - 1))d ~/place
+								sed -i "$arg d" ~/place
 								cat -n ~/place
+
 							fi
 						fi
 						;;
