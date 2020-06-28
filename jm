@@ -94,7 +94,7 @@ echo "========================================================================"
 								echo $line
 								sed -i "$arg d" ~/place
 								echo $line >> ~/place
-								lines=(`cat ~/place`)
+								lines=$(`cat ~/place`)
 							fi
 						else
 							echo "argument with number of line is needed"
@@ -469,21 +469,28 @@ do
 			;;
 
 		"a")
-			while read line;
-			do
-				if [[ $line == $2 ]]
-				then
-					exflag=1
-				fi
-			done < ~/place
+			if ! [ -z $2 ]
+			then
+				while read line;
+				do
+					if [[ $line == $2 ]]
+					then
+						exflag=1
+					fi
+				done < ~/place
+				
 				if [[ $exflag != 1 ]]
 				then
 					echo $2	>> ~/place
 					lines=$(cat ~/place)
 				fi
 				cat -n ~/place
-				shift
-				shift
+			else
+				echo "argument with path is needed"
+			fi
+			
+			shift
+			shift
 			;;
 
 		"i")
