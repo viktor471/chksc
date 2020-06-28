@@ -44,6 +44,7 @@ echo "=================Interactive mode: press h for help ===================="
 			do
 				printf "[i mode] "
 				read answer arg arg2
+				echo $arg
 				case $answer in
 					h)
 echo "========================================================================"
@@ -82,15 +83,22 @@ echo "      clear: ---------------- clear target-place file"
 echo "========================================================================"
 						;;
 
-#					sl)
-#						if [ -z $arg ]
-#						then 
-#							if [ ${#lines[@]} < $arg ]
-#							then
-#								echo "value of argument is larger than quantity of lines in file"
-#							else
-#								line=${lines[$((arg - 1))]}
-#							;;
+					sl)
+						if ! [[ -z "$arg" ]]
+						then 
+							if [[ ${#lines[@]} < $arg ]]
+							then
+								echo "value of argument is larger than quantity of lines in file"
+							else
+								line=${lines[(($arg - 1))]}
+								echo $line
+								sed -i "$arg d" ~/place
+								echo $line >> ~/place
+							fi
+						else
+							echo "argument with number of line is needed"
+						fi
+						;;
 
 					hs)
 						if [ -z $arg ]
@@ -276,25 +284,32 @@ echo "========================================================================"
 						;;
 
 					[0-9]*)
-						cd "${lines[$(($answer - 1))]}"
-						echo "${lines[$(($answer - 1))]}" >> ~/hplaces
+						cd "${lines[(($answer - 1))]}"
+						echo "${lines[(($answer - 1))]}" >> ~/hplaces
 						pwd
 						;;
 					
 					s)
-						while read line;
-						do
-							if [[ $line == "$(pwd)" ]]
-							then
-								exflag=1
-							fi
-						done < ~/place
-						
-						if [[ $exflag != 1 ]]
+						if [ -s ~/place ]
 						then
-							echo $(pwd)	>> ~/place
+							while read line;
+							do
+								if [[ $line == "$(pwd)" ]]
+								then
+									exflag=1
+								else
+									exflag=0
+								fi
+								done < ~/place
+						else
+							exflag=0
 						fi
-						cat -n ~/place
+						
+							if [[ $exflag != 1 ]]
+							then
+								echo $(pwd)	>> ~/place
+							fi
+							cat -n ~/place
 						;;
 					
 					c)
