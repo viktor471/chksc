@@ -84,16 +84,17 @@ echo "========================================================================"
 						;;
 
 					sl)
-						if ! [[ -z "$arg" ]]
+						if ! [ -z "$arg" ]
 						then 
 							if [[ ${#lines[@]} < $arg ]]
 							then
 								echo "value of argument is larger than quantity of lines in file"
 							else
-								line=${lines[(($arg - 1))]}
+								line="${lines[$(($arg - 1))]}"
 								echo $line
 								sed -i "$arg d" ~/place
 								echo $line >> ~/place
+								lines=(`cat ~/place`)
 							fi
 						else
 							echo "argument with number of line is needed"
@@ -237,6 +238,7 @@ echo "========================================================================"
 						if [[ $answ == "yes" ]]
 						then
 							>~/place
+							lines=""
 						fi
 						;;
 
@@ -308,6 +310,7 @@ echo "========================================================================"
 							if [[ $exflag != 1 ]]
 							then
 								echo $(pwd)	>> ~/place
+								lines=$(cat ~/place)
 							fi
 							cat -n ~/place
 						;;
@@ -343,6 +346,7 @@ echo "========================================================================"
 							if [[ $exflag != 1 ]]
 							then
 								echo $arg	>> ~/place
+								lines=$(cat ~/place)
 							fi
 						fi
 						;;
@@ -357,6 +361,7 @@ echo "========================================================================"
 							if [[ $a == "y" ]]
 							then
 								sed -i "$arg d" ~/place
+								lines=$(cat ~/place)
 								cat -n ~/place
 
 							fi
@@ -386,6 +391,7 @@ if [[ $# -eq 0 ]]
 	then
 		cd "$(tail -1 ~/place)"
 		echo $(pwd) >> ~/hplaces
+		lines=$(cat ~/place)
 		exec bash
 		exit 0
 	fi
@@ -431,6 +437,7 @@ do
 				if [[ $exflag != 1 ]]
 				then
 					echo $(pwd)	>> ~/place
+					lines=$(cat ~/place)
 				fi
 				cat -n ~/place
 				shift
@@ -454,6 +461,7 @@ do
 			if [[ $a == "y" ]]
 			then
 				sed -i $2d ~/place
+				lines=$(cat ~/place)
 				cat -n ~/place
 			fi
 			shift;
@@ -471,6 +479,7 @@ do
 				if [[ $exflag != 1 ]]
 				then
 					echo $2	>> ~/place
+					lines=$(cat ~/place)
 				fi
 				cat -n ~/place
 				shift
@@ -493,6 +502,7 @@ do
 			if [[ $answ == "yes" ]]
 			then
 				>~/place
+				lines=$(cat ~/place)
 			fi
 			shift
 			;;
